@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Gmail Sell - লগইন</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            padding: 32px 24px;
+            width: 100%;
+            max-width: 400px;
+        }
+        h2 {
+            text-align: center;
+            color: #1f2937;
+            margin-bottom: 28px;
+            font-size: 28px;
+        }
+        input {
+            width: 100%;
+            padding: 14px 16px;
+            margin: 8px 0;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 16px;
+            background: #f8fafc;
+            transition: all 0.2s;
+        }
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+        }
+        button {
+            width: 100%;
+            padding: 14px;
+            background: #4f46e5;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background: #4338ca;
+        }
+        .error {
+            color: #ef4444;
+            text-align: center;
+            margin-top: 12px;
+            font-size: 14px;
+        }
+        .signup-link {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #6b7280;
+        }
+        a {
+            color: #4f46e5;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .demo-info {
+            background: #f1f5f9;
+            padding: 12px;
+            border-radius: 12px;
+            margin-top: 20px;
+            font-size: 12px;
+            color: #475569;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>🔐 লগইন করুন</h2>
+        <input type="email" id="email" placeholder="জিমেইল এড্রেস" value="admin@gmail.com">
+        <input type="password" id="password" placeholder="পাসওয়ার্ড" value="admin123">
+        <button onclick="login()">লগইন →</button>
+        <div class="signup-link">
+            নতুন ইউজার? <a href="signup.html">অ্যাকাউন্ট তৈরি করুন</a>
+        </div>
+        <div id="errorMsg" class="error"></div>
+        <div class="demo-info">
+            📌 ডেমো অ্যাকাউন্ট: admin@gmail.com / admin123
+        </div>
+    </div>
+
+    <script>
+        function login() {
+            let email = document.getElementById('email').value.trim();
+            let pass = document.getElementById('password').value;
+            let errorMsg = document.getElementById('errorMsg');
+
+            if(!email || !pass) {
+                errorMsg.innerText = "ইমেইল এবং পাসওয়ার্ড দিন";
+                return;
+            }
+
+            // Admin login check
+            if(email === "admin@gmail.com" && pass === "admin123") {
+                localStorage.setItem("currentUser", JSON.stringify({
+                    email: email,
+                    fullname: "Admin",
+                    role: "admin",
+                    balance: 0,
+                    phone: ""
+                }));
+                window.location.href = "admin.html";
+                return;
+            }
+
+            // Normal user login check from localStorage
+            let users = JSON.parse(localStorage.getItem("users")) || [];
+            let foundUser = users.find(u => u.email === email && u.password === pass);
+
+            if(foundUser) {
+                localStorage.setItem("currentUser", JSON.stringify(foundUser));
+                window.location.href = "dashboard.html";
+            } else {
+                errorMsg.innerText = "ভুল ইমেইল বা পাসওয়ার্ড";
+            }
+        }
+    </script>
+</body>
+</html>
